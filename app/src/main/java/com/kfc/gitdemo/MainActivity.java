@@ -1,8 +1,11 @@
 package com.kfc.gitdemo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Picture;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -35,9 +38,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       /* *//**
+         * 隐藏状态栏,ActionBar和导航栏
+         *//*
+        //去掉状态栏
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_main);//去掉状态栏的代码一定要在setContentView方法之前执行
+        //隐藏导航栏
+        View decorView = getWindow().getDecorView();
+        int option = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(option);
+        //隐藏ActionBar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();*/
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        button.setOnClickListener(new View.OnClickListener() {
+        /**
+         * 隐藏ActionBar，状态栏和导航栏透明
+         */
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+       button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "不错", Toast.LENGTH_SHORT).show();
@@ -52,7 +84,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private List<String> initData(){
+
+   /* *//**
+     * 标准沉浸式模式
+     *//*
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }*/
+     private List<String> initData(){
         List<String> data=new ArrayList<>();
         Picture picture;
         for (int i = 0; i <paths.length; i++) {
@@ -61,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         return data;
     }
 
-    @Override
+   @Override
     protected void onDestroy() {
         super.onDestroy();
         //记得在销毁的时候调用onDestroy()方法,用来销毁定时器

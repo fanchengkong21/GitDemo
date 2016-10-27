@@ -2,11 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
+    android:background="#00f"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kfc.gitdemo.MainActivity">
 
-    <com.kcode.autoscrollviewpager.view.AutoScrollViewPager
+
+ <com.kcode.autoscrollviewpager.view.AutoScrollViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="220dp"/>
@@ -17,4 +19,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"/>
+
 </RelativeLayout>
